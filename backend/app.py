@@ -1,5 +1,8 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from backend.routers.summaries import router as summaries_router
 
@@ -13,3 +16,7 @@ app.add_middleware(
 )
 
 app.include_router(summaries_router)
+
+_PUBLIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
+if os.path.isdir(_PUBLIC_DIR):
+    app.mount("/", StaticFiles(directory=_PUBLIC_DIR, html=True), name="public")
